@@ -1,26 +1,43 @@
 import React from 'react';
-import logo from './logo.svg';
+import { connect } from 'react-redux';
 import './App.css';
+import { Switch, Route, Redirect } from 'react-router-dom';
+import AuthorizationPage from './pages/AuthorizationPage/Page';
+import NewsPage from './pages/NewsPage/Page';
+import AddNewsPage from './pages/AddNewsPage/Page';
+import EditNewsPage from './pages/EditNewsPage/Page';
 
-function App() {
+const App = ({ user }) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='App'>
+      <Switch>
+        <Route
+          exact
+          path='/'
+          render={() =>
+            user ? <Redirect to='/news' /> : <AuthorizationPage />
+          }
+        />
+        <Route
+          exact
+          path='/news'
+          render={() => (user ? <NewsPage /> : <Redirect to='/' />)}
+        />
+        <Route
+          path='/news/add'
+          render={() => (user ? <AddNewsPage /> : <Redirect to='/' />)}
+        />
+        <Route
+          path='/news/:newsID'
+          render={() => (user ? <EditNewsPage /> : <Redirect to='/' />)}
+        />
+      </Switch>
     </div>
   );
-}
+};
 
-export default App;
+const mapStateToProps = (state) => ({
+  user: state.user.currentUser,
+});
+
+export default connect(mapStateToProps)(App);
