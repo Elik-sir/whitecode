@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import TextField from '@material-ui/core/TextField';
-import { useParams } from 'react-router-dom';
+import { useParams, withRouter } from 'react-router-dom';
 import { setEditingNews, editNews } from '../../redux/news/actions';
-import { Link } from 'react-router-dom';
 const EditNewsPage = ({ setEditingNews, editingNews, history, editNews }) => {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
@@ -52,6 +52,11 @@ const EditNewsPage = ({ setEditingNews, editingNews, history, editNews }) => {
               reader.readAsDataURL(file);
             }}
           />
+          <img
+            src={img}
+            style={{ width: '100px', height: '150px' }}
+            alt='news'
+          />
           <br />
           <button
             onClick={() => {
@@ -64,14 +69,13 @@ const EditNewsPage = ({ setEditingNews, editingNews, history, editNews }) => {
                   date: Date(),
                 });
                 setEditingNews({});
+                history.push('/news');
               } else {
                 alert('заполенны не все поля');
               }
             }}
           >
-            <Link to='/news' style={{ color: 'black', textDecoration: 'none' }}>
-              Редактировать
-            </Link>
+            Редактировать
           </button>
         </>
       ) : (
@@ -87,4 +91,7 @@ const mapDispatchToProps = (dispatch) => ({
   setEditingNews: (id) => dispatch(setEditingNews(id)),
   editNews: (news) => dispatch(editNews(news)),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(EditNewsPage);
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps),
+)(EditNewsPage);

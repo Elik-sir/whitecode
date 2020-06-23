@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
+import { compose } from 'redux';
 import TextField from '@material-ui/core/TextField';
 import { addNews } from '../../redux/news/actions';
-import { Link } from 'react-router-dom';
-const AddNewsPage = ({ addNews }, props) => {
+import { withRouter } from 'react-router-dom';
+const AddNewsPage = ({ addNews, history }) => {
   const [title, setTitle] = useState('');
   const [text, setText] = useState('');
   const [img, setImg] = useState('');
@@ -40,14 +41,13 @@ const AddNewsPage = ({ addNews }, props) => {
         onClick={() => {
           if (title && text && img) {
             addNews({ title, text, img });
+            history.push('/news');
           } else {
             alert('заполенны не все поля');
           }
         }}
       >
-        <Link to='/news' style={{ color: 'black', textDecoration: 'none' }}>
-          Создать новость!!
-        </Link>
+        Создать новость!!
       </button>
     </div>
   );
@@ -55,4 +55,8 @@ const AddNewsPage = ({ addNews }, props) => {
 const mapDispatchToProps = (dispatch) => ({
   addNews: (news) => dispatch(addNews(news)),
 });
-export default connect(null, mapDispatchToProps)(AddNewsPage);
+
+export default compose(
+  withRouter,
+  connect(null, mapDispatchToProps),
+)(AddNewsPage);
