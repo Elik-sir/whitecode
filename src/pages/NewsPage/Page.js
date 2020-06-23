@@ -2,7 +2,10 @@ import React from 'react';
 import News from '../../components/News/News.component';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-const NewsPage = ({ news }) => {
+
+const NewsPage = ({ news, channel, user, idTab }) => {
+  channel.postMessage({ sender: idTab, id: user.id });
+
   return (
     <div style={{}}>
       <h1>НОВОСТИ!!!</h1>
@@ -19,5 +22,6 @@ const NewsPage = ({ news }) => {
 };
 const mapStateToProps = (state) => ({
   news: state.news.news,
+  user: state.user.currentUser,
 });
 export default connect(mapStateToProps)(NewsPage);

@@ -4,6 +4,7 @@ import { signIn, startFetch } from '../../redux/user/actions';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { useStyles } from './styles';
 import TextField from '@material-ui/core/TextField';
+
 const AuthorizationPage = ({
   authorization,
   startFetch,
@@ -13,6 +14,7 @@ const AuthorizationPage = ({
   const [login, setLogin] = useState('');
   const [password, setPassword] = useState('');
   const classes = useStyles();
+
   return (
     <div>
       <h1>Авторизация</h1>
@@ -43,7 +45,9 @@ const AuthorizationPage = ({
           let a = new Promise((resolve) => {
             setTimeout(() => resolve(), 1000);
           });
-          a.then(() => authorization({ login, password }));
+          a.then(() => {
+            authorization({ login, password });
+          });
         }}
       >
         Войти
